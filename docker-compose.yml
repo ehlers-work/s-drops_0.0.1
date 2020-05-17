@@ -1,25 +1,47 @@
-version: '3'
+version: '2'
 
 services:
-
   drupal:
     image: drupal:8-apache
     ports:
       - 8080:80
-    volumes:
-      - ./modules:/var/www/html/modules
-      - ./profiles:/var/www/html/profiles
-      - ./themes:/var/www/html/themes
-      - ./sites:/var/www/html/sites
+
+ volumes:
+      - ./modules:/var/www/html/swebz/s-drops/modules
+      - ./profiles:/var/www/html/swebz/s-drops/profiles
+      - ./themes:/var/www/html/swebz/s-drops/themes
+      - ./sites:/var/www/html/swebz/s-drops/sites
+      - ./publik:/var/www/html/swebz/s-drops/sites/default/publik/media
+      - ./secret:/var/swebz/s-drops/secret
     restart: always
-  database:
-    image: mysql:latest
-    restart: always
-    ports:
-      - 3306:3306
-    volumes:
-      - drupal_data:/var/lib/mysql
-    environment:
-      MYSQL_ROOT_PASSWORD: sicher1233
-volumes:
-  drupal_data:
+
+    DB:
+        starage-DB
+        image: mysql:latest
+        volumes:
+            - "./.data/db:/var/lib/swebz/s-drops/mysql"
+        ports:
+             - 3306:3306
+        storage-mysql:
+        image: mysql:latest
+        restart: always
+        volumes:
+            - /var/lib/swebz/s-drops/mysql
+
+        environment:
+            MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+            MYSQL_DATABASE: ${MYSQL_DATABASE}
+            MYSQL_USER: ${MYSQL_USER}
+            MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    php:
+        build: php7-fpm
+        ports:
+            - 9001:9000
+        volumes:
+            - ${DRUPAL_APP_PATH}:/var/www/html/swebz/s-drops
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin
+        ports:
+            - "8083:80"
+        volumes:
+            - ${DRUPAL_APP_PATH}:/var/www/html/swebz/adphp/s-drops
