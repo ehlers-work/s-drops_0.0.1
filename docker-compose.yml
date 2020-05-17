@@ -44,4 +44,4 @@ services:
         ports:
             - "8083:80"
         volumes:
-            - ${DRUPAL_APP_PATH}:/var/www/html/swebz/adphp/s-drops
+            - ${DRUPAL_APP_PATH}:/var/www/html/swebz/adphp/s-drops 
